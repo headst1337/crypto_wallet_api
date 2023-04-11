@@ -21,5 +21,5 @@ class BaseResponce(BaseModel):
     response: Optional[Any]
 
 class GetDataRequest(BaseModel):
-    mnemonic: Optional[list]
+    mnemonic: Optional[str]
     private_key: Optional[str] = Field(max_length=64)

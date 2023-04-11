@@ -30,7 +30,7 @@ def create_new_wallet(lang: Lang, mnemonic_length: MnemonicLenght):
 @router.post("/data", response_model=BaseResponce)
 def get_wallet_data(request: GetDataRequest):
     if (request.mnemonic is not None):
-        seed = generate_mnemonic_seed(mnemonic=request.mnemonic)
+        seed, mnemonic = generate_mnemonic_seed(mnemonic=request.mnemonic)
         wallet_data = Account.get_wallet_data(seed)
     elif request.private_key is not None:
         wallet_data = Account.get_wallet_data(private_key=request.private_key)

@@ -17,13 +17,13 @@ from bip_utils import (
 def generate_mnemonic_seed( 
     lang: str = None,  
     length: int = None, 
-    mnemonic: Optional[list] = None
+    mnemonic: Optional[str] = None
 ) -> Tuple[bytes, str]:
     
     if mnemonic is None:
         mnemonic = generate_mnemonic(lang, length)
 
-    if re.search('[а-яА-Я]', mnemonic):
+    if re.search('[а-яА-Я]', str(mnemonic)):
         lang = 'ru'
     else:
         lang = 'en'
