@@ -8,6 +8,7 @@ from account.schemas import (
     MnemonicLenght,
     BaseResponce,
     GetDataRequest,
+    GetBalanceRequest
 )
 
 from account.constants import (
@@ -40,3 +41,11 @@ def get_wallet_data(request: GetDataRequest):
             'error': {'type': VALIDATION_ERROR, 'message': VALIDATION_ERROR_MESSAGE}
         }
     return {'status': 200, 'response': {'data': wallet_data}}
+
+@router.post("/balance", response_model=BaseResponce)
+def get_balance(request: GetBalanceRequest):
+    if request.contract_address:
+        balance = Account.get_token_balance(request.rpc, request.address, request.contract_address)
+    else:
+        balance = Account.get_balance(request.rpc, request.address)
+    return {'status': 200, 'response' : {'data': balance}}

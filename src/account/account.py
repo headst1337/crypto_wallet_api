@@ -36,11 +36,11 @@ class Account:
     @staticmethod
     def get_balance(rpc: str, address: str) -> Dict[str, Any]:
         web3 = Web3(Web3.HTTPProvider(rpc))
-        return {"balance": Web3.fromWei(web3.eth.get_balance(address), 'ether')}
+        return {"balance": Web3.from_wei(web3.eth.get_balance(address), 'ether')}
     
     @staticmethod
     def get_token_balance(rpc: str, address: str, contract_address: str) -> Dict[str, Any]:
         web3 = Web3(Web3.HTTPProvider(rpc))
         contract = web3.eth.contract(contract_address, abi=ERC20_ABI)
         balance = contract.functions.balanceOf(address).call()
-        return {"balance" : Web3.fromWei(balance, 'ether')}
+        return {"balance" : Web3.from_wei(balance, 'ether')}

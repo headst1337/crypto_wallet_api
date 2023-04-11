@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Any, Optional
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 
 
 class Lang(str, Enum):
@@ -17,9 +17,14 @@ class MnemonicLenght(str, Enum):
     L25 = '25'
 
 class BaseResponce(BaseModel):
-    status : int
+    status : int = 200
     response: Optional[Any]
 
 class GetDataRequest(BaseModel):
     mnemonic: Optional[str]
     private_key: Optional[str] = Field(max_length=64)
+
+class GetBalanceRequest(BaseModel):
+    rpc: str	
+    address : str = Field(max_length=42)
+    contract_address : Optional[str] = Field(max_length=42)
