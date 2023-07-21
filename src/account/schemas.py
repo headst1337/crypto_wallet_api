@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Any, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 
 
 class Lang(str, Enum):
@@ -9,22 +9,23 @@ class Lang(str, Enum):
 
 class MnemonicLenght(str, Enum):
     L12 = '12'
-    L13 = '13'
-    L15 = '15'
-    L18 = '18'
-    L21 = '21'
     L24 = '24'
-    L25 = '25'
 
 class BaseResponce(BaseModel):
     status : int = 200
     response: Optional[Any]
 
 class GetDataRequest(BaseModel):
-    mnemonic: Optional[str]
-    private_key: Optional[str] = Field(max_length=64)
+    mnemonic: Optional[str] = None
+    private_key: Optional[str] = Field(None, max_length=64) 
+
+    @validator('mnemonic', 'private_key', pre=True, always=True)
+    def check_mnemonic_or_private_key(cls, v, values):
+        if v is None and values.get('private_key') is None:
+            raise ValueError("At least one of 'mnemonic' or 'private_key' must be provided.")
+        return v
 
 class GetBalanceRequest(BaseModel):
     rpc: str	
     address : str = Field(max_length=42)
-    contract_address : Optional[str] = Field(max_length=42)
+    contract_address : Optional[str] = Field(None, max_length=42)
