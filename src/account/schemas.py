@@ -12,10 +12,10 @@ class MnemonicLenght(str, Enum):
     L24 = '24'
 
 class BaseResponce(BaseModel):
-    status : int = 200
+    status: int = 200
     response: Optional[Any]
 
-class GetDataRequest(BaseModel):
+class DataRequest(BaseModel):
     mnemonic: Optional[str] = None
     private_key: Optional[str] = Field(None, max_length=64) 
 
@@ -25,7 +25,7 @@ class GetDataRequest(BaseModel):
             raise ValueError("At least one of 'mnemonic' or 'private_key' must be provided.")
         return v
 
-class GetBalanceRequest(BaseModel):
+class BalanceRequest(BaseModel):
     rpc: str	
-    address : str = Field(max_length=42)
-    contract_address : Optional[str] = Field(None, max_length=42)
+    address: str = Field(max_length=42)
+    contract_address: Optional[str] = Field(None, max_length=42)

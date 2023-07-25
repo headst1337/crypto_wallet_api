@@ -3,7 +3,14 @@ import binascii
 from typing import Any, Dict
 
 from web3 import Web3
-from bip_utils import Bip44, Bip44Changes, Bip44Coins
+
+from bip_utils import (
+    Bip44,
+    Bip44Changes,
+    Bip44Coins
+    
+    )
+
 from erc20_abi import ERC20_ABI
 
 

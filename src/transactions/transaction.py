@@ -1,8 +1,8 @@
+from hexbytes import HexBytes
 from web3 import Web3
 from eth_account import Account
 
 from erc20_abi import ERC20_ABI
-
 
 
 class Transaction:
@@ -61,3 +61,40 @@ class Transaction:
         transaction_hash = web3.eth.send_raw_transaction(signed_transaction.rawTransaction)
         transaction_receipt = web3.eth.wait_for_transaction_receipt(transaction_hash)
         return {'hash': transaction_receipt['transactionHash'].hex()}
+    
+    @staticmethod
+    def get_transaction_receipt(rpc: str, transaction_hash: str) -> dict[str, str]:
+        web3 = Web3(Web3.HTTPProvider(rpc))
+        transaction_receipt_info = web3.eth.get_transaction_receipt(transaction_hash)
+        transaction_info = web3.eth.get_transaction(transaction_hash)
+        token_logs = transaction_receipt_info.get("logs")
+        is_token_transaction = bool(token_logs)
+        transaction_receipt = {}
+        if is_token_transaction:
+            token_contract = token_logs[0].get("address")
+            token_value = int(bytes(token_logs[0].get("data")))
+            receiver = token_logs[0].get("topics")[2]
+            receiver = "0x" + HexBytes.hex(receiver)[26:74]
+            token_contract_str = str(token_contract)
+            token_value_str = str(Web3.from_wei(token_value, 'ether'))
+            transaction_receipt = {
+                "from": transaction_receipt_info.get("from"),
+                "to": receiver,
+                "gasUsed": transaction_receipt_info.get("gasUsed"),
+                "status": transaction_receipt_info.get("status"),
+                "value": "null",
+                "tokenContract": token_contract_str,
+                "tokenValue": token_value_str
+            }
+        else:
+            native_value_str = str(Web3.from_wei(transaction_info.get("value"), 'ether'))
+            transaction_receipt = {
+                "from": transaction_receipt_info.get("from"),
+                "to": transaction_receipt_info.get("to"),
+                "gasUsed": transaction_receipt_info.get("gasUsed"),
+                "status": transaction_receipt_info.get("status"),
+                "value": native_value_str,
+                "tokenContract": "null",
+                "tokenValue": "null"
+            }
+        return transaction_receipt
