@@ -14,7 +14,7 @@ ____________________________________
 | Retrieval of account balance and token balance      | ✔️          |
 | Transaction and token transfer capabilities         | ✔️          |
 | Exchange via PancakeSwap and Uniswap                | ❌          |
-| Retrieval of transaction information using a hash   | ❌          |      
+| Retrieval of transaction information using a hash   | ✔️          |      
 
 ## Future Plans :thought_balloon:
 
@@ -39,3 +39,13 @@ ____________________________________
 ### Postscript :memo:
 
 Unfortunately, we do not have enough time to actively develop and expand the functionality, so updates may be rare. :(
+
+## Start Project:
+
+> **Venv**
+
+source venv/bin/activate
+
+> **Start Project**
+
+uvicorn main:app --host 0.0.0.0 --port 80
