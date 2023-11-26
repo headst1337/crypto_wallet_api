@@ -72,8 +72,15 @@ class Transaction:
         transaction_receipt = {}
         if is_token_transaction:
             token_contract = token_logs[0].get("address")
-            token_value = int(bytes(token_logs[0].get("data")))
-            receiver = token_logs[0].get("topics")[2]
+            chainId = transaction_info.get("chainId")
+            if chainId == 137:
+                token_value = transaction_info.get("value")
+            else:
+                token_value = int.from_bytes(bytes(token_logs[0].get("data")), byteorder='big')
+            if chainId != 1: 
+                receiver = token_logs[0].get("topics")[2]
+            else:
+                receiver = token_logs[0].get("topics")[0]
             receiver = "0x" + HexBytes.hex(receiver)[26:74]
             token_contract_str = str(token_contract)
             token_value_str = str(Web3.from_wei(token_value, 'ether'))
